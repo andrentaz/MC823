@@ -1,6 +1,6 @@
-/* Client.c --------------------------------------------------------------------
- * Andre Nakagaki Filliettaz 	- RA104595 -------------------------------------
- * Guilherme Alcarde Gallo 	- RA105008 -------------------------------------
+/* CliFunctions.c - UDP Socket -------------------------------------------------
+ * Andre Nakagaki Filliettaz 	- RA104595 --------------------------------------
+ * Guilherme Alcarde Gallo 	- RA105008 --------------------------------------
  * -------------------------------------------------------------------------- */
 
 /* Implementation of all the functions used on Client.c  */
@@ -55,14 +55,10 @@ void showOptions() {
 
 /* -------------------------------------------------------------------------- */
 
-void alterStock(int sockfd, char isbn[], char qtd[]) {
+void alterStock(int sockfd, char isbn[], char qtd[], struct addrinfo *saddr) {
 	char asw[5000];	// Response from server
 	char *time;	// Operation Time from the Server
 	int read_bytes,sig=0;
-	typedef struct livro {
-		char i[20];	// ISBN
-		char q[4];	// Stock Quantity
-	} Livro;
 
 	Livro tt;
 	strcpy(tt.i,isbn);
@@ -73,13 +69,13 @@ void alterStock(int sockfd, char isbn[], char qtd[]) {
 	struct timeval t0, t1;	// Guarda tempo percorrido
 
 	// Sending request for password to server
-	if ( send(sockfd, "5", 2, 0) < 0) {
+	if ( sendto(sockfd, "5", 2, 0, saddr->ai_addr, saddr->ai_addrlen) < 0) {
 		printf("SEND FAILURE!\n");	// DEBUG 
 		return;
 	}
 
 	// Sending the password string to server
-	if ( send(sockfd, &tt, 30, 0) < 0) {
+	if ( sendto(sockfd, &tt, 30, 0, saddr->ai_addr, saddr->ai_addrlen) < 0) {
 		printf("SEND FAILURE!\n");	// DEBUG 
 		return;
 	}
@@ -92,7 +88,7 @@ void alterStock(int sockfd, char isbn[], char qtd[]) {
 
 		gettimeofday(&t0, 0);		// Capturando tempo de inicio
 		/* Read a maximum of 500 bytes from buffer */
-		if ( read_bytes = recv(sockfd, asw, 5000, 0) < 0 ) {
+		if ( read_bytes = recvfrom(sockfd, asw, 5000, 0, saddr->ai_addr, &saddr->ai_addrlen) < 0 ) {
 			printf("Erro no receive!!\n\n");
 			return;
 		} else {
@@ -124,23 +120,25 @@ void alterStock(int sockfd, char isbn[], char qtd[]) {
 	elapsed = 0;
 }
 
-void pass(int sockfd, char pwd[]) {
+/* -------------------------------------------------------------------------- */
+
+void pass(int sockfd, char pwd[], struct addrinfo *saddr) {
 	char asw[5000];	// Response from server
 
 	// Sending request for password to server
-	if ( send(sockfd, "7", 2, 0) < 0) {
+	if ( sendto(sockfd, "7", 2, 0, saddr->ai_addr, saddr->ai_addrlen) < 0) {
 		printf("SEND FAILURE!\n");	// DEBUG 
 		return;
 	}
 
 	// Sending the password string to server
-	if ( send(sockfd, pwd, 50, 0) < 0) {
+	if ( sendto(sockfd, pwd, 50, 0) < 0, saddr->ai_addr, saddr->ai_addrlen) {
 		printf("SEND FAILURE!\n");	// DEBUG 
 		return;
 	}
 
 	// Receiving the answer of server authentication
-	if ( recv(sockfd, asw, 200, 0) < 0 ) {
+	if ( recvfrom(sockfd, asw, 200, 0, saddr->ai_addr, &saddr->ai_addrlen) < 0 ) {
 		printf("[1] RECEIVE FAILURE\nasw: %s", asw );	// DEBUG
 		return;
 	}
@@ -151,10 +149,12 @@ void pass(int sockfd, char pwd[]) {
 
 /* -------------------------------------------------------------------------- */
 
-int dataFetch(int sockfd, char *ISBN, char op[]) {
+int dataFetch(int sockfd, char *ISBN, char op[], struct addrinfo *saddr) {
 	char asw[5000];	// Answer from the Server
 	char *time;	// Operation Time from the Server
 	int read_bytes, sig=0, errc=0;
+	
+	socklen_t addr_len;
 
 	long elapsed = 0; 	// Guarda intervalo de tempo
 	int nRevcs = 0;		// Guarda numero de receives
@@ -163,8 +163,8 @@ int dataFetch(int sockfd, char *ISBN, char op[]) {
 	/* Formating output */
 	printf("\n");
 	
-	/* Sends the Request to the Server and check errors*/
-	if ( send(sockfd, op, 2, 0) < 0 ) {
+	/* Sends the Request to the Server and check errors */
+	if ( sendto(sockfd, op, strlen(op), 0, saddr->ai_addr, saddr->ai_addrlen) < 0 ) {
 		printf("Sending Error! Aborting!\n");
 		return -1;
 	}
@@ -172,7 +172,7 @@ int dataFetch(int sockfd, char *ISBN, char op[]) {
 	if ( op[0] != '1' && op[0] != '4' ) {
 		/* Send the ISBN required to the operation in case
 		 * of operations 2 and 3 */
-		if ( send(sockfd, ISBN, strlen(ISBN), 0) < 0 ) {
+		if ( sendto(sockfd, ISBN, strlen(ISBN), 0, saddr->ai_addr, saddr->ai_addrlen) < 0 ) {
 			printf("Sending Error! Aborting!\n");
 			return -1;
 		}
@@ -183,32 +183,36 @@ int dataFetch(int sockfd, char *ISBN, char op[]) {
 	/* Reading L00P! Read from the buffer as long there is data at the buffer,
 	 * if receives the signal to stop (char '^D') then stop reading */
 	elapsed = 0;
+	
 	while(1) {
 
 		/* Cleans the string */
 		memset(asw,0,5000);
 
 		gettimeofday(&t0, 0);		// Capturando tempo de inicio
-		/* Read a maximum of 500 bytes from buffer */
-		if ( read_bytes = recv(sockfd, asw, 5000, 0) < 0 ) 
+
+		/* Read a maximum of 5000 bytes from buffer */
+		if ( read_bytes = recvfrom(sockfd, asw, 5000, 0, saddr->ai_addr, &saddr->ai_addrlen) < 0 ) 
 			 return -1;
 		else {
 			gettimeofday(&t1, 0);	// Capturando tempo de termino
 			nRevcs++;		// Atualizando contagem de receive
+			
 			// Calculando intervalo de tempo em microsegundos
 			elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-			 /* Tests if received string contains the char
-			  * '^D', which means TRANSMISSION OVER */
-			 sig=check_str(asw, '');
-			 
-			 /* Testing here what is what... */
-			 if (sig > 0) {
-				 /* End Reading */
-				 printf("%s", asw);
-				 break;
-			 } else  /* Continue Reading! */
-				 printf("%s", asw);
-			 
+
+			/* Tests if received string contains the char
+			 * '^D', which means TRANSMISSION OVER */
+			sig=check_str(asw, '');
+
+			/* Testing here what is what... */
+			if (sig > 0) {
+				/* End Reading */
+				printf("%s", asw);
+				break;
+			} else  /* Continue Reading! */
+				printf("%s", asw);
+
 		}
 	}
 

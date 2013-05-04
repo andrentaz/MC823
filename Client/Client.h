@@ -4,34 +4,38 @@
  * -------------------------------------------------------------------------- */
 
 /* HEADER - Support the program with the includes, typedefs and all king of
- * declaration and preprocessor problems*/
+ * declaration and preprocessor problems */
 
-/* Standarts input and output librarys */
+/* Standart input and output libraries */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <time.h>
 
 /* Library to deal with the networks syscalls */
 #include <arpa/inet.h>
-//#include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
 
-/* Defines */
-
-#define PASSWRD "mc832"	// Password to some operations
-
-//short int ACCESS = 0;	// Controls the mode of the Client (Livraria or Comum)
+/* Typedefs */
+typedef struct livro {
+	char i[20];     // ISBN
+	char q[4];      // Stock Quantity
+} Livro;
 
 /* Functions Declarations */
 void showOptins();		// Explanation Function
-int listAll(int);		// List All the ISBN and Titles of the Books
-int dataFetch(int, char *, char []);	// Fetch the Description or Infos 
-int listAllInfos(int);		// List All the Books and respectivily infos
-int changeStocks(int);		// Change the Numbers on stock (Admin ONLY)
-int reportNumbers(int, char *);	// Show the numbers on stock
-int autenticate(char *);	// Autenticate the change stock operation
+
+/* Fetch the Description or Infos */
+int dataFetch(int, char *, char [], struct addrinfo *); 
+
+/* Change the Stock Number (Administrator Only)*/
+void alterStock(int, char [], char [], struct addrinfo *);
 
 /* Auxiliar Function */
 int fetch(int, char **, int);
-int check_str(char *, char); 
+int check_str(char *, char);
+void logger(char [], int, int, int);
+void pass(int, char [], struct addrinfo *);
