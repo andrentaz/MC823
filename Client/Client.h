@@ -18,6 +18,8 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <errno.h>
+#include <netdb.h>
 
 /* Typedefs */
 typedef struct livro {

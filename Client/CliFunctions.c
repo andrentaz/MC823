@@ -132,7 +132,7 @@ void pass(int sockfd, char pwd[], struct addrinfo *saddr) {
 	}
 
 	// Sending the password string to server
-	if ( sendto(sockfd, pwd, 50, 0) < 0, saddr->ai_addr, saddr->ai_addrlen) {
+	if ( sendto(sockfd, pwd, 50, 0, saddr->ai_addr, saddr->ai_addrlen) < 0) {
 		printf("SEND FAILURE!\n");	// DEBUG 
 		return;
 	}

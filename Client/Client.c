@@ -37,9 +37,9 @@ int main (int argc, char *argv[]) {
 	}
 
 	/* Take the first of the addrinfo inside the list */
-	for (tmp = servinfo; tmp != NULL; tmp = tmp->ai_next;) {
+	for (tmp = servinfo; tmp != NULL; tmp = tmp->ai_next) {
 		/* Get the Socket Descriptor */
-		if ((sockfd = socket(tmp->ai_family, tmp->ai_socketype, tmp->ai_protocol)) == -1 ) {
+		if ((sockfd = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol)) == -1 ) {
 			printf("Error on socket creation! Trying next address struct!\n");
 			continue;
 		}
