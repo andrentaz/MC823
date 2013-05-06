@@ -110,7 +110,7 @@ static int callback(void *NotUsed, int argc, char **ans, char **azColName) {
 		}
 	}
 	strcat(aux, "\n");
-	printf("Tamanho= %d\n%s", strlen(aux), aux);
+	printf("Tamanho= %d\n%s", (int)strlen(aux), aux);
 	num = strlen(aux);
 	//sendall(client_sock, aux, &num);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
@@ -313,6 +313,36 @@ int main(void) {
 				perror("server: sendto");
 				exit(1);
 			}
+			break;
+
+		case 4:		// Todas as informacoes de todos os livros
+			elapsed = 0;
+			// Executando query
+			rc =
+					sqlite3_exec(db,
+							"select l.ISBN10, l.titulo, a.autor, a.autor2, a.autor3, a.autor4, l.descricao, l.editora, l.ano, l.estoque from livro l, autor a where l.autores=a.a_id;",
+							callbackFmt, 0, &zErrMsg);
+
+			// Fim da mensagem
+			// Tempo percorrido ate agora
+			gettimeofday(&t1, 0);
+			// Calculo do tempo de operacao
+			elapsed = (t1.tv_sec - t0.tv_sec) * 1000000 + t1.tv_usec
+					- t0.tv_usec;
+			// Transformando em string com chars de "seguranca" para postumo atoi
+			sprintf(query, "          %6li", elapsed);
+			// DEBUG
+			printf("\nOperation Time: %s\n\n", query);
+			// Calculando o tamanho
+			length = strlen(query);
+			// Finalmente envia para o cliente
+			//		sendall(client_sock, query, &length);
+			if ((numbytes = sendto(sockfd, query, strlen(query), 0,
+					(struct sockaddr *) &their_addr, addr_len)) == -1) {
+				perror("server: sendto");
+				exit(1);
+			}
+
 			break;
 
 		}
