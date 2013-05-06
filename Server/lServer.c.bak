@@ -64,7 +64,7 @@ static int callbackSilent(void *NotUsed, int argc, char **ans, char **azColName)
 	return 0;
 }
 
-// Callback do SQLite3. Versao formatada para varios detalhes
+// Callback do SQLite3. Versao detalhada e formatada, para varios detalhes
 static int callbackFmt(void *NotUsed, int argc, char **ans, char **azColName){
 	int i, num;
 	char aux[20000];
