@@ -161,8 +161,8 @@ int main(void) {
 
 	// Servidor interativo
 	while (1) {
-		//if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
-		if ((rv = getaddrinfo("127.0.0.1", "8888", &hints, &servinfo)) != 0) {
+		if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
+		//if ((rv = getaddrinfo("127.0.0.1", "8888", &hints, &servinfo)) != 0) {
 			fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 			return 1;
 		}
@@ -242,12 +242,79 @@ int main(void) {
 			length = strlen(query);
 			// Finalmente envia para o cliente
 			//					sendall(client_sock, query, &length);
+			if ((numbytes = sendto(sockfd, query, strlen(query), 0,	(struct sockaddr *) &their_addr, addr_len)) == -1) {
+				perror("server: sendto");
+				exit(1);
+			}
+			break;
+
+			/***********************************/
+
+		case 2:		// Descricao de um livro
+			elapsed = 0;
+			// Esperando o cliente mandar o ISBN desejado
+			// Tempo percorrido ate agora
+			gettimeofday(&t1, 0);
+			// ReCalculo do tempo de operacao
+			elapsed += (t1.tv_sec - t0.tv_sec) * 1000000 + t1.tv_usec
+					- t0.tv_usec;
+			//		if ( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 ) {
+
+			if ((read_size = recvfrom(sockfd, client_message, 2000, 0,
+					(struct sockaddr *) &their_addr, &addr_len)) == -1) {
+				//							gettimeofday(&t0, 0);
+				// Montando a query
+				strcpy(query, "select descricao from livro where ISBN10 = ");
+				strcpy(query2,
+						"select count(descricao) from livro where ISBN10 = ");
+				// Concatenando o ISBN
+				strcat(query, client_message);
+				strcat(query2, client_message);
+				// Fim do comando SQLite
+				strcat(query, ";");
+
+				// Verificando se ha livros
+				// callbackSilent nao envia dados ao cliente
+				// existe recebe o resultado de contagem de livros (0 ou 1)
+				rc = sqlite3_exec(db, query2, callbackSilent, existe, &zErrMsg);
+				// Tempo percorrido ate agora
+				//	gettimeofday(&t1, 0);
+				if (*((int *) existe) == 0) {
+					length = 41;
+					//				sendall(client_sock, "\nEste ISBN nao consta na nossa livraria!\n",&length);
+					if ((numbytes = sendto(sockfd,
+							"\nEste ISBN nao consta na nossa livraria!\n", 42,
+							0, (struct sockaddr *) &their_addr, addr_len))
+							== -1) {
+						perror("server: sendto");
+						exit(1);
+					}
+				} else
+					// Executando query - Callback já faz os sends
+					rc = sqlite3_exec(db, query, callback, 0, &zErrMsg);
+			}
+			length = 1;
+
+			gettimeofday(&t1, 0);
+			// Fim da mensagem
+			// ReCalculo do tempo de operacao
+			elapsed += (t1.tv_sec - t0.tv_sec) * 1000000 + t1.tv_usec
+					- t0.tv_usec;
+			// Transformando em string com chars de "seguranca" para postumo atoi
+			sprintf(query, "          %6li", elapsed);
+			// DEBUG
+			printf("\nOperation Time: %s\n\n", query);
+			// Calculando o tamanho
+			length = strlen(query);
+			// Finalmente envia para o cliente
+			//sendall(client_sock, query, &length);
 			if ((numbytes = sendto(sockfd, query, strlen(query), 0,
 					(struct sockaddr *) &their_addr, addr_len)) == -1) {
 				perror("server: sendto");
 				exit(1);
 			}
 			break;
+
 		}
 		close(sockfd);
 	}
