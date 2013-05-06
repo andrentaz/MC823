@@ -67,18 +67,18 @@ int main(int argc, char *argv[])
 	printf("talker: sent %d bytes to %s\n", numbytes, argv[1]);
 
 	addr_len = sizeof their_addr;
-//	if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
-//		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
 	if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
-		p->ai_addr,&addr_len)) == -1) {
+		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
+//	if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
+//		p->ai_addr,&addr_len)) == -1) {
 		perror("recvfrom");
 		exit(1);
 	}
 
-	getchar();
-
+//	if ((numbytes = sendto(sockfd, "Valeu, mane!", 13, 0,
+//			 p->ai_addr, p->ai_addrlen)) == -1) {
 	if ((numbytes = sendto(sockfd, "Valeu, mane!", 13, 0,
-			 p->ai_addr, p->ai_addrlen)) == -1) {
+		 (struct sockaddr *)&their_addr, addr_len)) == -1) {
 		perror("talker: sendto");
 		exit(1);
 	}
