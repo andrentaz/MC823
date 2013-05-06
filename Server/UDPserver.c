@@ -110,7 +110,7 @@ static int callback(void *NotUsed, int argc, char **ans, char **azColName) {
 		}
 	}
 	strcat(aux, "\n");
-	printf("%s", aux);
+	printf("Tamanho= %d\n%s", strlen(aux), aux);
 	num = strlen(aux);
 	//sendall(client_sock, aux, &num);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
@@ -213,10 +213,12 @@ int main(void) {
 		buf[numbytes] = '\0';
 		printf("listener: packet contains \"%s\"\n", buf);
 
+		/* Teste do envio
 		if ((numbytes = sendto(sockfd, "Chegou?", 8, 0, 			(struct sockaddr *) &their_addr, addr_len)) == -1) {
 			perror("server: sendto");
 			exit(1);
 		}
+		*/
 
 		opcao = atoi(buf);
 
