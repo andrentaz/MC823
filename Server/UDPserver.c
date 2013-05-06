@@ -127,8 +127,6 @@ int main(void) {
 	char buf[MAXBUFLEN];
 	char s[INET6_ADDRSTRLEN];
 
-	//////////////
-	//
 
 	char client_message[2000], query[2500], query2[2500];
 
@@ -155,9 +153,6 @@ int main(void) {
 
 	// Abrindo Banco de Dados do SQLite3
 	rc = sqlite3_open("livraria2.db", &db);
-	//////////
-	//
-	//
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
@@ -166,7 +161,8 @@ int main(void) {
 
 	// Servidor interativo
 	while (1) {
-		if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
+		//if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
+		if ((rv = getaddrinfo("127.0.0.1", "8888", &hints, &servinfo)) != 0) {
 			fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 			return 1;
 		}
