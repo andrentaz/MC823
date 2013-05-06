@@ -1,6 +1,6 @@
 /* CliFunctions.c - UDP Socket -------------------------------------------------
- * Andre Nakagaki Filliettaz 	- RA104595 --------------------------------------
- * Guilherme Alcarde Gallo 	- RA105008 --------------------------------------
+ * Andre Nakagaki Filliettaz 	- RA104595 -------------------------------------
+ * Guilherme Alcarde Gallo 	- RA105008 -------------------------------------
  * -------------------------------------------------------------------------- */
 
 /* Implementation of all the functions used on Client.c  */
