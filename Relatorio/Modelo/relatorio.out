@@ -1,0 +1,28 @@
+\BOOKMARK [0][-]{chapter.1}{Considera\347\365es Gerais}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Objetivos do Jogo}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Funcionalidades}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{Especifica\347\365es}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{Observa\347\365es}{chapter.1}% 5
+\BOOKMARK [0][-]{chapter.2}{Descri\347\343o dos Componentes}{}% 6
+\BOOKMARK [-1][-]{part.1}{I Entrada}{}% 7
+\BOOKMARK [0][-]{section.2.1}{Especifica\347\343o}{part.1}% 8
+\BOOKMARK [1][-]{subsection.2.1.1}{Modo de Mapeamento}{section.2.1}% 9
+\BOOKMARK [1][-]{section.2.2}{Fun\347\343o}{section.2.1}% 10
+\BOOKMARK [-1][-]{part.2}{II Engine}{}% 11
+\BOOKMARK [0][-]{section.2.3}{Especifica\347\343o}{part.2}% 12
+\BOOKMARK [1][-]{section.2.4}{Fun\347\343o}{section.2.3}% 13
+\BOOKMARK [1][-]{section.2.5}{Ideia Geral}{section.2.3}% 14
+\BOOKMARK [2][-]{subsection.2.5.1}{A M\341quina de Estados}{section.2.5}% 15
+\BOOKMARK [2][-]{subsection.2.5.2}{Estat\355sticas}{section.2.5}% 16
+\BOOKMARK [1][-]{section.2.6}{Observa\347\365es}{section.2.3}% 17
+\BOOKMARK [-1][-]{part.3}{III Sa\355da}{}% 18
+\BOOKMARK [0][-]{section.2.7}{Especifica\347\343o}{part.3}% 19
+\BOOKMARK [1][-]{subsection.2.7.1}{VGA}{section.2.7}% 20
+\BOOKMARK [1][-]{section.2.8}{Fun\347\343o}{section.2.7}% 21
+\BOOKMARK [1][-]{section.2.9}{Ideia Geral}{section.2.7}% 22
+\BOOKMARK [1][-]{section.2.10}{Observa\347\365es}{section.2.7}% 23
+\BOOKMARK [-1][-]{part.4}{IV Outros Componentes}{}% 24
+\BOOKMARK [0][-]{section.2.11}{Especifica\347\343o}{part.4}% 25
+\BOOKMARK [1][-]{section.2.12}{Fun\347\343o}{section.2.11}% 26
+\BOOKMARK [1][-]{section.2.13}{Ideia Geral}{section.2.11}% 27
+\BOOKMARK [0][-]{chapter.3}{Conclus\343o}{part.4}% 28

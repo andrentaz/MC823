@@ -1,0 +1,19 @@
+\BOOKMARK [0][-]{chapter.1}{Servidor}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Callback e o envio da mensagem}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Opera\347\365es}{chapter.1}% 3
+\BOOKMARK [2][-]{subsection.1.2.1}{Listar dados}{section.1.2}% 4
+\BOOKMARK [2][-]{subsection.1.2.2}{Listar dados espec\355ficos}{section.1.2}% 5
+\BOOKMARK [2][-]{subsection.1.2.3}{Autentica\347\343o do Cliente Livraria e Mudan\347a no estoque}{section.1.2}% 6
+\BOOKMARK [1][-]{section.1.3}{Contando o tempo}{chapter.1}% 7
+\BOOKMARK [2][-]{subsection.1.3.1}{Cliente contando tempo}{section.1.3}% 8
+\BOOKMARK [2][-]{subsection.1.3.2}{Servidor contando tempo}{section.1.3}% 9
+\BOOKMARK [1][-]{section.1.4}{C\363digo Completo}{chapter.1}% 10
+\BOOKMARK [0][-]{chapter.2}{Cliente}{}% 11
+\BOOKMARK [1][-]{section.2.1}{Explica\347\365es das Fun\347\365es}{chapter.2}% 12
+\BOOKMARK [0][-]{chapter.3}{Banco de Dados}{}% 13
+\BOOKMARK [0][-]{chapter.4}{Rodando o Servidor em casa}{}% 14
+\BOOKMARK [0][-]{chapter.5}{An\341lise de Dados}{}% 15
+\BOOKMARK [1][-]{section.5.1}{Servidor e Cliente na mesma m\341quina}{chapter.5}% 16
+\BOOKMARK [1][-]{section.5.2}{Servidor numa rede e Cliente na outra}{chapter.5}% 17
+\BOOKMARK [0][-]{chapter.6}{Conclus\343o}{}% 18
+\BOOKMARK [0][-]{chapter.7}{Refer\352ncias Bibliogr\341ficas}{}% 19
