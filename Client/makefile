@@ -11,3 +11,4 @@ debug:
 	gcc Client.c CliFunctions.c -o Client -g
 run:	build
 	./Client
+r:	build run
