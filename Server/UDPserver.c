@@ -89,11 +89,17 @@ static int callbackFmt(void *NotUsed, int argc, char **ans, char **azColName) {
 	// Enviando para o cliente
 	num = strlen(aux);
 	//	sendall(client_sock, aux, &num);
+	gettimeofday(&t1, 0);
+	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+	gettimeofday(&t0, 0);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
 					(struct sockaddr *) &their_addr, addr_len)) == -1) {
 		perror("server: sendto");
 		exit(1);
 	}
+	gettimeofday(&t1, 0);
+	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+	gettimeofday(&t0, 0);
 	return 0;
 }
 
@@ -113,11 +119,17 @@ static int callback(void *NotUsed, int argc, char **ans, char **azColName) {
 	printf("Tamanho= %d\n%s", (int)strlen(aux), aux);
 	num = strlen(aux);
 	//sendall(client_sock, aux, &num);
+	gettimeofday(&t1, 0);
+	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+	gettimeofday(&t0, 0);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
 					(struct sockaddr *) &their_addr, addr_len)) == -1) {
 		perror("server: sendto");
 		exit(1);
 	}
+	gettimeofday(&t1, 0);
+	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+	gettimeofday(&t0, 0);
 	return 0;
 }
 
@@ -198,6 +210,8 @@ int main(void) {
 			perror("recvfrom");
 			exit(1);
 		}
+		// Comecando a contar o tempo de operacao
+		gettimeofday(&t0, 0);
 
 		printf("listener: got packet from %s\n",
 				inet_ntop(their_addr.ss_family,
@@ -207,13 +221,6 @@ int main(void) {
 		printf("listener: packet is %d bytes long\n", numbytes);
 		buf[numbytes] = '\0';
 		printf("listener: packet contains \"%s\"\n", buf);
-
-		/* Teste do envio
-		   if ((numbytes = sendto(sockfd, "Chegou?", 8, 0, 			(struct sockaddr *) &their_addr, addr_len)) == -1) {
-		   perror("server: sendto");
-		   exit(1);
-		   }
-		   */
 
 		opcao = atoi(buf);
 
