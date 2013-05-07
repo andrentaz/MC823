@@ -258,15 +258,19 @@ int main(void) {
 			// ReCalculo do tempo de operacao
 			elapsed += (t1.tv_sec - t0.tv_sec) * 1000000 + t1.tv_usec
 					- t0.tv_usec;
-			//		if ( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 ) {
 
-			if ((read_size = recvfrom(sockfd, client_message, 2000, 0,
-					(struct sockaddr *) &their_addr, &addr_len)) == -1) {
+				printf("\nISBN1:%s\n", client_message);
+		if ((numbytes = recvfrom(sockfd, client_message, MAXBUFLEN - 1, 0,
+				(struct sockaddr *) &their_addr, &addr_len)) == -1) {
+			perror("recvfrom");
+			exit(1);
+		}
 				//							gettimeofday(&t0, 0);
 				// Montando a query
 				strcpy(query, "select descricao from livro where ISBN10 = ");
 				strcpy(query2,
 						"select count(descricao) from livro where ISBN10 = ");
+				printf("\nISBN2:%s\n", client_message);
 				// Concatenando o ISBN
 				strcat(query, client_message);
 				strcat(query2, client_message);
@@ -292,7 +296,6 @@ int main(void) {
 				} else
 					// Executando query - Callback já faz os sends
 					rc = sqlite3_exec(db, query, callback, 0, &zErrMsg);
-			}
 			length = 1;
 
 			gettimeofday(&t1, 0);
