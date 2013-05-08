@@ -9,7 +9,7 @@
 /* Include all the stuff need to execute the program */
 #include "Client.h"
 #define MYPORT "4950"
-#define SERVIP "143.106.174.65"
+#define SERVIP "143.106.16.244"		// Ribeiro - IC301
 
 /* Main function */
 int main (int argc, char *argv[]) {
