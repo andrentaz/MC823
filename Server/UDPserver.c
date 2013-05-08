@@ -91,14 +91,11 @@ static int callbackFmt(void *NotUsed, int argc, char **ans, char **azColName) {
 	//	sendall(client_sock, aux, &num);
 	gettimeofday(&t1, 0);
 	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-	gettimeofday(&t0, 0);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
 					(struct sockaddr *) &their_addr, addr_len)) == -1) {
 		perror("server: sendto");
 		exit(1);
 	}
-	gettimeofday(&t1, 0);
-	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
 	gettimeofday(&t0, 0);
 	return 0;
 }
@@ -121,14 +118,11 @@ static int callback(void *NotUsed, int argc, char **ans, char **azColName) {
 	//sendall(client_sock, aux, &num);
 	gettimeofday(&t1, 0);
 	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-	gettimeofday(&t0, 0);
 	if ((numbytes = sendto(sockfd, aux, strlen(aux), 0,
 					(struct sockaddr *) &their_addr, addr_len)) == -1) {
 		perror("server: sendto");
 		exit(1);
 	}
-	gettimeofday(&t1, 0);
-	elapsed += (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
 	gettimeofday(&t0, 0);
 	return 0;
 }
@@ -290,7 +284,6 @@ int main(void) {
 				// Tempo percorrido ate agora
 				//	gettimeofday(&t1, 0);
 				if (*((int *) existe) == 0) {
-					length = 41;
 					//				sendall(client_sock, "\nEste ISBN nao consta na nossa livraria!\n",&length);
 					if ((numbytes = sendto(sockfd,
 									"\nEste ISBN nao consta na nossa livraria!\n", 42,
@@ -302,8 +295,6 @@ int main(void) {
 				} else
 					// Executando query - Callback já faz os sends
 					rc = sqlite3_exec(db, query, callback, 0, &zErrMsg);
-				length = 1;
-
 				gettimeofday(&t1, 0);
 				// Fim da mensagem
 				// ReCalculo do tempo de operacao
@@ -358,6 +349,7 @@ int main(void) {
 				if (*((int *) existe) == 0) {
 					length = 41;
 					//		sendall(client_sock, "\nEste ISBN nao consta na nossa livraria!\n",&length);
+					gettimeofday(&t1, 0);
 					if ((numbytes = sendto(sockfd,
 									"\nEste ISBN nao consta na nossa livraria!\n", 42,
 									0, (struct sockaddr *) &their_addr, addr_len))
@@ -366,7 +358,6 @@ int main(void) {
 						exit(1);
 					}
 					// Tempo percorrido ate agora
-					gettimeofday(&t1, 0);
 				} else {
 					// Executando query - Callback já faz os sends
 					rc = sqlite3_exec(db, query, callbackFmt, 0, &zErrMsg);
