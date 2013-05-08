@@ -9,6 +9,7 @@
 /* Include all the stuff need to execute the program */
 #include "Client.h"
 #define MYPORT "4950"
+#define SERVIP "143.106.174.65"
 
 /* Main function */
 int main (int argc, char *argv[]) {
@@ -32,7 +33,7 @@ int main (int argc, char *argv[]) {
 
 
 	/* Create the list of structs */
-	if (getaddrinfo ("127.0.0.1", MYPORT, &hints, &servinfo) != 0) {
+	if (getaddrinfo (SERVIP,MYPORT, &hints, &servinfo) != 0) {
 		printf("Erro na alocacao de Enderecos!\n");
 		return -1;
 	}
