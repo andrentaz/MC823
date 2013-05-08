@@ -14,7 +14,7 @@
 /* Main function */
 int main (int argc, char *argv[]) {
 	/* Control Variables */
-	char op, isbn[11], pwd[50], qtt[4];
+	char op, isbn[11], pwd[50], qtt[4], sIP[20];
 
 	/* With the connection done, read to send requests to the server */
 	int sockfd;
@@ -26,6 +26,11 @@ int main (int argc, char *argv[]) {
 	tv.tv_usec = 0;  // Not init'ing this can cause strange errors
 
 
+	/* Defining the IP */
+	if (argv[1] == NULL)	strcpy(sIP, SERVIP);		/* Default */
+	else if (argv[1]=="0")	strcpy(sIP, "127.0.0.1");	/* Host */
+	else 			strcpy(sIP, argv[1]);		/* Passed */
+
 	/* Setting hints to get the list of addrinfo struct */
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;	/* Any kind of IP */
@@ -33,7 +38,7 @@ int main (int argc, char *argv[]) {
 
 
 	/* Create the list of structs */
-	if (getaddrinfo (SERVIP,MYPORT, &hints, &servinfo) != 0) {
+	if (getaddrinfo (sIP,MYPORT, &hints, &servinfo) != 0) {
 		printf("Erro na alocacao de Enderecos!\n");
 		return -1;
 	}
