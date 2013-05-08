@@ -271,7 +271,7 @@ int main(void) {
 					perror("recvfrom");
 					exit(1);
 				}
-				//							gettimeofday(&t0, 0);
+				gettimeofday(&t0, 0);
 				// Montando a query
 				strcpy(query, "select descricao from livro where ISBN10 = ");
 				strcpy(query2,
@@ -339,9 +339,8 @@ int main(void) {
 				if ((read_size = recvfrom(sockfd, client_message, 2000, 0,
 								(struct sockaddr *) &their_addr, &addr_len)) == -1) {
 				}
-				//							gettimeofday(&t0, 0);
+				gettimeofday(&t0, 0);
 				// Montando a query
-				//strcpy(query, "select * from livro where ISBN10 = ");
 
 				strcpy(query,
 						"select l.ISBN10, l.titulo, a.autor, a.autor2, a.autor3, a.autor4, l.descricao, l.editora, l.ano, l.estoque from livro l, autor a where l.autores=a.a_id and ISBN10 = ");
@@ -438,7 +437,7 @@ int main(void) {
 					perror("server: sendto");
 					exit(1);
 				}
-				//							gettimeofday(&t0, 0);
+				gettimeofday(&t0, 0);
 				if (superuser) {
 					// Montando a query
 					strcpy(query, "update livro set estoque = ");
@@ -497,7 +496,7 @@ int main(void) {
 					perror("recvfrom");
 					exit(1);
 				}
-				//							gettimeofday(&t0, 0);
+				gettimeofday(&t0, 0);
 				// Montando a query
 				strcpy(query, "select estoque from livro where ISBN10 = ");
 				// Concatenando o ISBN
