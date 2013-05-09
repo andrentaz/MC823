@@ -1,6 +1,6 @@
 /* CliFunctions.c - UDP Socket -------------------------------------------------
  * Andre Nakagaki Filliettaz 	- RA104595 -------------------------------------
- * Guilherme Alcarde Gallo 	- RA105008 -------------------------------------
+ * Guilherme Alcarde Gallo 	- RA105008 -----------------------------------------
  * -------------------------------------------------------------------------- */
 
 /* Implementation of all the functions used on Client.c  */
@@ -152,7 +152,7 @@ void pass(int sockfd, char pwd[], struct addrinfo *saddr) {
 int dataFetch(int sockfd, char *ISBN, char op[], struct addrinfo *saddr) {
 	char asw[5000];	// Answer from the Server
 	char *time;	// Operation Time from the Server
-	int read_bytes, sig=0, errc=0;
+	int read_bytes, sig=0, errc=0, length=0;
 	
 	socklen_t addr_len;
 
@@ -209,12 +209,16 @@ int dataFetch(int sockfd, char *ISBN, char op[], struct addrinfo *saddr) {
 			if (sig > 0) {
 				/* End Reading */
 				printf("%s", asw);
+				length += strlen(asw);
 				break;
 			} else  /* Continue Reading! */
 				printf("%s", asw);
+				length += strlen(asw);
 
 		}
 	}
+
+	printf("\nTotal received bytes: %d\n", length);
 
 	/* Formating the output! */
 	time = asw+strlen(asw)-8;

@@ -1,0 +1,16 @@
+\BOOKMARK [0][-]{chapter.1}{UDP x TCP}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Servidor}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Opera\347\365es}{chapter.2}% 3
+\BOOKMARK [2][-]{subsection.2.1.1}{Listagem Geral}{section.2.1}% 4
+\BOOKMARK [2][-]{subsection.2.1.2}{Listagem Espec\355fica}{section.2.1}% 5
+\BOOKMARK [2][-]{subsection.2.1.3}{Autentica\347\343o do Cliente Livraria e Mudan\347a no estoque}{section.2.1}% 6
+\BOOKMARK [1][-]{section.2.2}{Contando o tempo}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.3}{C\363digo Completo}{chapter.2}% 8
+\BOOKMARK [0][-]{chapter.3}{Cliente}{}% 9
+\BOOKMARK [1][-]{section.3.1}{Explica\347\365es das Fun\347\365es Principais}{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.2}{A Estrutura addrinfo}{chapter.3}% 11
+\BOOKMARK [0][-]{chapter.4}{An\341lise de Dados}{}% 12
+\BOOKMARK [1][-]{section.4.1}{Servidor e Cliente UDP}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.2}{Comparando UDP e TCP}{chapter.4}% 14
+\BOOKMARK [0][-]{chapter.5}{Conclus\343o}{}% 15
+\BOOKMARK [0][-]{chapter.6}{Refer\352ncias Bibliogr\341ficas}{}% 16

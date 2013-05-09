@@ -1,6 +1,6 @@
 /* Client.c - UDP Socket ------------------------------------------------------
- * Andre Nakagaki Filliettaz 	- RA104595 --------------------------------------
- * Guilerme Alcarde Gallo 	- RA105008 -----------------------------------------
+ * Andre Nakagaki Filliettaz 	- RA104595 ------------------------------------
+ * Guilerme Alcarde Gallo 	- RA105008 ----------------------------------------
  ----------------------------------------------------------------------------*/
 
 /* This programs deals with the interface with the humans and requests to
@@ -142,6 +142,7 @@ int main (int argc, char *argv[]) {
 
 	}
 	
+	freeaddrinfo(servinfo);
 	close(sockfd);
 	return 0;	// Terminating program
 
