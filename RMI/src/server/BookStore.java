@@ -27,7 +27,7 @@ public class BookStore implements rmtBookStore {
 	@Override
 	public ArrayList<String> showStore() throws RemoteException {
 		ArrayList<String> store = new ArrayList<String>();		/* Return */
-		String aux, query = "SELECT ISBN10, titulo FROM livro";	/* MySQL */
+		String aux, query = "SELECT ISBN10, titulo FROM livro";	/* SQL */
 		
 		try {
 			ResultSet res = fetchData(query);
@@ -59,29 +59,113 @@ public class BookStore implements rmtBookStore {
 			throws RemoteException {
 		ArrayList<String> book = new ArrayList<String>();
 		String aux, query = "SELECT titulo, descricao FROM livro " +
-				"WHERE ISBN10 = ";	/* MySQL */
+				"WHERE ISBN10 = ";	/* SQL */
 		
 		query.concat(isbn);
 		
+		/* DEBUG */
+		System.out.println(query);
+		
 		/* Working on it */
 		try {
+			ResultSet res = fetchData(query);
 			
+			while (res.next()) {
+				/* First Line is the ISBN string */
+				aux = "ISBN: ";
+				aux.concat(isbn);
+				book.add(aux);
+				
+				/* Second Line is the Title String */
+				aux = "Titulo: ";
+				aux.concat(res.getString("titulo"));
+				book.add(aux);
+				
+				/* Third Line is the Description */
+				book.add(res.getString("descricao"));
+			}
+			
+			/* Case Result Set was an empty set */
+			if(book.size() == 0)	book.add("Esse ISBN nao consta em nossos" +
+					"estoques, desculpe!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 		
-		return null;
+		return book;
 	}
 
 
 	@Override
 	public ArrayList<String> fetchInfos(String isbn) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> book = new ArrayList<String>();
+		String aux, query = "SELECT * FROM livro WHERE ISBN10 = ";	/* SQL */
+		
+		query.concat(isbn);
+		
+		/* DEBUG */
+		System.out.println(query);
+		
+		try {
+			ResultSet res = fetchData(query);
+			
+			while (res.next()) {
+				/* First Line is the ISBN string */
+				aux = "ISBN: ";
+				aux.concat(isbn);
+				book.add(aux);
+				
+				/* Second Line is the Title String */
+				aux = "Titulo: ";
+				aux.concat(res.getString("titulo"));
+				book.add(aux);
+				
+				/* Third Line is the Publishing House */
+				aux = "Editora: ";
+				aux.concat(res.getString("editora"));
+				book.add(aux);
+				
+				/* Fourth Line is the year */
+				aux = "Ano: ";
+				aux.concat(Integer.toString(res.getInt("ano")));
+				book.add(aux);
+				
+				/* Fifth Line is the Number on Store */
+				aux = "Estoque: ";
+				aux.concat(Integer.toString(res.getInt("estoque")));
+				book.add(aux);
+				
+				/* Descricao */
+				book.add(res.getString("descricao"));
+			}
+			
+			/* Result Set is Empty */
+			if(book.size() == 0)	book.add("Esse ISBN nao consta em nossos" +
+					"estoques, desculpe!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return book;
 	}
 
 
 	@Override
 	public ArrayList<String> fetchAll() throws RemoteException {
-		// TODO Auto-generated method stub
+		ArrayList<String> store = new ArrayList<String>();
+		String aux, query = "SELECT * FROM livro";	/* SQL */
+		
+		try {
+			ResultSet res = fetchData(query);
+			
+			/* Each book is separated by an '^D' */
+			while (res.next()) {
+				
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return null;
 	}
 
