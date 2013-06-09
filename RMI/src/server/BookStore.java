@@ -8,6 +8,9 @@
 package server;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import client.rmtBookStore;
 import java.sql.*;
@@ -34,36 +37,29 @@ public class BookStore implements rmtBookStore {
 			// if the error message is "out of memory",
 			// it probably means no database file is found
 			System.err.println(e.getMessage());
-		} finally {
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				// connection close failed.
-				System.err.println(e);
-			}
-		}
+		} 
 	}
 
 	/* Methods */
 	/* Auxiliar Methods */
 	public ResultSet fetchData(String query) throws SQLException {
 
-			ResultSet rs = statement.executeQuery("select * from livro");
-			ResultSet res = rs;
+			//ResultSet rs = statement.executeQuery("select * from livro");
+			return(statement.executeQuery("select * from livro"));
+		/*	ResultSet res = rs;
 			while (rs.next()) {
 				// read the result set
 				System.out.println("name = " + rs.getString("titulo"));
 				System.out.println("ano = " + rs.getInt("ano"));
 			}
-			return res;
+			return res;*/
 
 	}
 
 	@Override
 	public ArrayList<String> showStore() throws RemoteException {
 		ArrayList<String> store = new ArrayList<String>(); /* Return */
-		String aux, query = "SELECT ISBN10, titulo FROM livro"; /* SQL */
+		String aux = "", query = "SELECT ISBN10, titulo FROM livro"; /* SQL */
 
 		try {
 			ResultSet res = fetchData(query);
@@ -74,9 +70,10 @@ public class BookStore implements rmtBookStore {
 				 * Each line of 'store' it's one book, aux is the tmp variable
 				 * that holds each line of the result set
 				 */
-				aux = Integer.toString(res.getInt("ISBN10"));
-				aux.concat(" | ");
-				aux.concat(res.getString("titulo"));
+				System.out.println("isbn = " + res.getString("ISBN10"));
+				aux = res.getString("ISBN10");
+				aux = aux + " | ";
+				aux += res.getString("titulo");
 
 				/* DEBUG */
 				System.out.println(aux);
@@ -86,7 +83,7 @@ public class BookStore implements rmtBookStore {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
+		System.out.println("Enviando dados...");
 		/* Returning the Array List */
 		return store;
 	}
@@ -197,13 +194,13 @@ public class BookStore implements rmtBookStore {
 
 			/* Each book is separated by an '^D' */
 			while (res.next()) {
-
+				//store.add(res.getString());
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return null;
+		return store;
 	}
 
 	@Override
@@ -214,4 +211,20 @@ public class BookStore implements rmtBookStore {
 
 	/* Remotes Methods */
 
+	public static void main(String args[]) {
+
+		try {
+			BookStore obj = new BookStore();
+			rmtBookStore stub = (rmtBookStore) UnicastRemoteObject.exportObject(obj, 0);
+
+			// Bind the remote object's stub in the registry
+			Registry registry = LocateRegistry.getRegistry();
+			registry.bind("rmtBookStore", stub);
+
+			System.err.println("Servidor ready");
+		} catch (Exception e) {
+			System.err.println("Servidor exception: " + e.toString());
+			e.printStackTrace();
+		}
+	}
 }
