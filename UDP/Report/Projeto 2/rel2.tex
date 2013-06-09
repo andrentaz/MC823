@@ -1,5 +1,5 @@
 \documentclass[10pt,a4paper]{report}
-\usepackage[hmargin=1cm,vmargin=1cm,bmargin=0.5cm]{geometry}
+\usepackage[hmargin=2cm,vmargin=3.5cm,bmargin=2cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel}
 \usepackage[T1]{fontenc}
@@ -13,6 +13,9 @@
 \usepackage[pdftex]{hyperref}
 \usepackage{csvsimple}
 \usepackage{color}
+
+% Headers and Footers
+\usepackage{fancyhdr}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -45,13 +48,22 @@
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 
+% Headers and Footers
+\pagestyle{fancy} % fancy style
+\lhead{\rightmark} % left header
+\chead{\textbf{Network Programming}} % central header
+\rhead{\leftmark} % right header
+\lfoot{} % left footer
+\cfoot{\textbf{\thepage}} % central footer
+\rfoot{} % right footer
+% Headers and Footers
+
 \makeindex
 
 % define the title
 \author{André Nakagaki Fillettaz RA: 104595 \\ Guilherme Alcarde Gallo RA: 105008}
 \title{MC823 - Relat\'orio - Servidor Interativo sobre UDP}
 \begin{document}
-
 
 % generates the title
 \maketitle
