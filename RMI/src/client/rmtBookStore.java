@@ -10,6 +10,7 @@ package client;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import server.Book;
 
 public interface rmtBookStore extends Remote {
 	/* Shows the content of the Store */
@@ -22,7 +23,7 @@ public interface rmtBookStore extends Remote {
 	public ArrayList<String> fetchInfos(String isbn) throws RemoteException;
 
 	/* Get all the infos from all the books of the Store */
-	public ArrayList<String> fetchAll() throws RemoteException;
+	public ArrayList<Book> fetchAll() throws RemoteException;
 
 	/* Get the numbers of books on store */
 	public int getNumber(String isbn) throws RemoteException;
