@@ -1,0 +1,5 @@
+Sobre o makefile:
+
+make server: compila tudo para rodar no terminal
+make eclipse: executa o rmiregistry no local correto e deixa pronto para usar no eclipse
+make restart: mata o rmiregistry para permitir uma reexecução
