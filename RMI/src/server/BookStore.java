@@ -13,7 +13,7 @@ import client.rmtBookStore;
 import java.sql.*;
 
 public class BookStore implements rmtBookStore {
-	Statement statement;
+	private Statement statement;
 
 	/* Constructor */
 <<<<<<< HEAD
@@ -22,7 +22,7 @@ public class BookStore implements rmtBookStore {
 	public BookStore() throws ClassNotFoundException {
 		/* Fazendo conexão com o banco de dados em SQLite3 a partir do conector
 		 * JDBC.
-		 * Todo o banco de dados estará acessível via a variável statement
+		 * Todo o banco de dados estará acessível via atributo privado statement
 		 */
 		Class.forName("org.sqlite.JDBC");
 
