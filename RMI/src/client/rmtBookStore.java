@@ -17,7 +17,8 @@ public interface rmtBookStore extends Remote {
 	public ArrayList<String> showStore() throws RemoteException;
 
 	/* Look for and show the description of a given ISBN */
-	public ArrayList<String> fetchDescription(String isbn) throws RemoteException;
+	public ArrayList<String> fetchDescription(String isbn)
+			throws RemoteException;
 
 	/* Search for info about an ISBN */
 	public ArrayList<String> fetchInfos(String isbn) throws RemoteException;

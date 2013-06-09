@@ -188,7 +188,6 @@ public class BookStore implements rmtBookStore {
 	}
 
 
-
 	public ArrayList<Book> fetchAll() throws RemoteException {
 		ArrayList<Book> store = new ArrayList<Book>();
 		String query = "SELECT * FROM livro";	/* SQL */
@@ -235,7 +234,6 @@ public class BookStore implements rmtBookStore {
 	}
 
 
-
 	public int getNumber(String isbn) throws RemoteException {
 		String aux = "SELECT estoque FROM livro WHERE ISBN10 = ";	/* SQL */
 
@@ -259,6 +257,5 @@ public class BookStore implements rmtBookStore {
 
 		return 0;
 	}
-
 
 }
