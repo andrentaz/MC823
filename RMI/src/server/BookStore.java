@@ -9,10 +9,10 @@ package server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import client.rmtBookStore;
+import client.RmtBookStore;
 import java.sql.*;
 
-public class BookStore implements rmtBookStore {
+public class BookStore implements RmtBookStore {
 	private Statement statement;
 
 	/* Constructor */
@@ -48,7 +48,7 @@ public class BookStore implements rmtBookStore {
 	
 	/* Methods */
 	/* Auxiliar Methods */
-	public ResultSet fetchData(String query) throws SQLException {
+	private ResultSet fetchData(String query) throws SQLException {
 
 			ResultSet rs = statement.executeQuery("select * from livro");
 			ResultSet res = rs;
@@ -248,8 +248,7 @@ public class BookStore implements rmtBookStore {
 			while (res.next())
 				return res.getInt("estoque");
 
-			System.out.println("Esse ISBN nao consta em nossos " +
-					"estoques, desculpe!");
+			return -1;
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
