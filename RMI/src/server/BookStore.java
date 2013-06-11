@@ -14,6 +14,7 @@ import java.sql.*;
 
 public class BookStore implements RmtBookStore {
 	private Statement statement;
+	private String pass;
 
 	/* Constructor */
 	public BookStore() throws ClassNotFoundException {
@@ -45,22 +46,7 @@ public class BookStore implements RmtBookStore {
 		}
 	}
 	
-	
 	/* Methods */
-	/* Auxiliar Methods */
-	private ResultSet fetchData(String query) throws SQLException {
-
-			ResultSet rs = statement.executeQuery("select * from livro");
-			ResultSet res = rs;
-			while (rs.next()) {
-				// read the result set
-				System.out.println("name = " + rs.getString("titulo"));
-				System.out.println("ano = " + rs.getInt("ano"));
-			}
-			return res;
-
-	}
-
 	/* Remote Methods */
 	@Override
 	public ArrayList<String> showStore() throws RemoteException {
@@ -68,7 +54,8 @@ public class BookStore implements RmtBookStore {
 		String aux;	/* SQL */
 
 		try {
-			ResultSet res = fetchData("SELECT ISBN10, titulo FROM livro");
+			ResultSet res = statement.executeQuery("SELECT ISBN10, " +
+					"titulo FROM livro");
 
 			/* Handling the Data */
 			while (res.next()) {
@@ -106,7 +93,7 @@ public class BookStore implements RmtBookStore {
 
 		/* Working on it */
 		try {
-			ResultSet res = fetchData(aux);
+			ResultSet res = statement.executeQuery(aux);
 
 			while (res.next()) {
 				/* First Line is the ISBN string */
@@ -145,7 +132,7 @@ public class BookStore implements RmtBookStore {
 		System.out.println(query);
 
 		try {
-			ResultSet res = fetchData(query);
+			ResultSet res = statement.executeQuery(query);
 
 			while (res.next()) {
 				/* First Line is the ISBN string */
@@ -193,7 +180,7 @@ public class BookStore implements RmtBookStore {
 		String query = "SELECT * FROM livro";	/* SQL */
 
 		try {
-			ResultSet res = fetchData(query), author;
+			ResultSet res = statement.executeQuery(query), author;
 			Book bk = new Book();
 			ArrayList<String> tmp = new ArrayList<String>();
 
@@ -213,7 +200,7 @@ public class BookStore implements RmtBookStore {
 				/* DEBUG */
 				System.out.println(query);
 
-				author = fetchData(query);
+				author = statement.executeQuery(query);
 
 				/* VERIFICAR */
 				author.next();
@@ -233,7 +220,7 @@ public class BookStore implements RmtBookStore {
 		return store;
 	}
 
-
+	
 	public int getNumber(String isbn) throws RemoteException {
 		String aux = "SELECT estoque FROM livro WHERE ISBN10 = ";	/* SQL */
 
@@ -243,7 +230,7 @@ public class BookStore implements RmtBookStore {
 		System.out.println();
 
 		try {
-			ResultSet res = fetchData(aux);
+			ResultSet res = statement.executeQuery(aux);
 
 			while (res.next())
 				return res.getInt("estoque");
@@ -255,6 +242,20 @@ public class BookStore implements RmtBookStore {
 		}
 
 		return 0;
+	}
+
+	
+	@Override
+	public String setNumber(int num, String isbn, String pwd)
+			throws RemoteException, SQLException {
+		
+		if (pwd == this.pass) {
+			String aux = "UPDATE livro SET estoque = ";
+			aux += num + " WHERE ISBN10 = " + isbn;			
+			statement.executeUpdate(aux);
+			return "Estoque alterado com sucesso!";
+		}
+		else return "Incorrect Password! Permission denied!";
 	}
 
 }

@@ -9,6 +9,7 @@ package client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import server.Book;
 
@@ -28,5 +29,8 @@ public interface RmtBookStore extends Remote {
 
 	/* Get the numbers of books on store */
 	public int getNumber(String isbn) throws RemoteException;
+	
+	/* Set the numbers of books on store */
+	public String setNumber(int num, String isbn, String pwd) throws RemoteException, SQLException;
 
 }

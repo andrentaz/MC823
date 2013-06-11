@@ -15,8 +15,7 @@ import server.Book;
 
 public class Client {
 	/* Constructor */
-	private Client() {
-	}
+	private Client() {}
 
 	static public void showOptions() {
 		System.out
@@ -30,11 +29,10 @@ public class Client {
 				.println("[4]: Information- Displays the infos from a given ISBN");
 		System.out
 				.println("[5]: All Infos	- Show all the infos from all the books");
-		System.out.println("[6]: Password	- Authenticate the livraria account");
 		System.out
-				.println("[7]: Changing	- Change the numbers of the Stock **");
-		System.out.println("[8]: On Stock	- Numbers on Stock");
-		System.out.println("[9]: Quit	  	- Bye Bye!\n");
+				.println("[6]: Changing	- Change the numbers of the Stock **");
+		System.out.println("[7]: On Stock	- Numbers on Stock");
+		System.out.println("[8]: Quit	  	- Bye Bye!\n");
 
 		System.out.println("---------");
 		System.out.println("** Administrator Only!\n");
@@ -52,8 +50,7 @@ public class Client {
 		ArrayList<Book> serv_bk = new ArrayList<Book>();
 
 		/* The host can be passed by arguments */
-		String pwd, isbn, host = (args.length < 1) ? null : args[0];
-		
+		String pwd, isbn, host = (args.length < 1) ? null : args[0];	
 		
 		try {
 			/* Getting the stub to do the Remote Calls */
@@ -117,25 +114,20 @@ public class Client {
 
 					break;
 
-				case 6:
-					System.out
-							.println("Digite a senha para cliente livraria...");
-					pwd = scan.nextLine(); // Getting ISBN
-
-					/* Calling the superuser mode function */
-					break;
-
-				case 7: // Changing the stores numbers				
+				case 6: // Changing the stores numbers				
 					System.out.println("Waiting for the new stock amount!");
 					qtd = scan.nextInt(); // Getting new Stock amount
 					System.out.println("Waiting for ISBN of the Book!");
 					isbn = scan.nextLine(); // Getting ISBN
 
 					/* Calling the fetching result function */
+					System.out.println("Password: ");
+					pwd = scan.nextLine();
+					stub.setNumber(qtd, isbn, pwd);
 
 					break;
 
-				case 8: // Numbers on stock
+				case 7: // Numbers on stock
 					System.out.println("Waiting for ISBN of the Book!");
 					isbn = scan.nextLine(); // Getting ISBN
 					qtd = stub.getNumber(isbn);
@@ -150,7 +142,7 @@ public class Client {
 
 					break;
 
-				case 9: // Quiting the program!
+				case 8: // Quiting the program!
 					System.out.println("Quiting now!");
 					break;
 
@@ -159,7 +151,7 @@ public class Client {
 					break;
 				} /* End Switch */
 
-				if (op == 9)
+				if (op == 8)
 					break;
 
 			}
