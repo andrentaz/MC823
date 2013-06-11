@@ -7,25 +7,10 @@ public class Book {
 	private String isbn, pubHouse;
 	private String desc, title;
 	private int store, relDate;
-	private ArrayList<String> author = new ArrayList<String>();
+	private ArrayList<String> author;
 	
 	
 	/* Methods */
-	/* Auxiliar Methods */
-	public void print() {
-		System.out.println("ISBN: " + isbn);
-		System.out.println("Titulo: " + title);
-		System.out.println("Lançamento: " + relDate);
-		System.out.println("Editora: " + pubHouse);
-		System.out.print("Autor:");
-		for(int index=0; index<author.size(); index++)
-			System.out.println(" " + author.get(index));
-		System.out.println("Descricao: " + desc);
-		System.out.println("Quantidade: " + store);
-		System.out.println();
-	}
-
-	/* Getters and Setters */
 	public String getIsbn() {
 		return isbn;
 	}

@@ -1,5 +1,5 @@
 /* Andre Nakagaki Filliettaz --------------------------------------------------
- * BookStore.java -------------------------------------------------------------
+ * BookStoreold.java -------------------------------------------------------------
  * ----------------------------------------------------------------------------
  * Description: class that implements the remote interface and will be used by
  * the server to send all the stuffs ------------------------------------------
@@ -15,19 +15,15 @@ import java.util.ArrayList;
 import client.rmtBookStore;
 import java.sql.*;
 
-public class BookStore implements rmtBookStore {
+public class BookStoreold implements rmtBookStore {
 	private Statement statement;
-	private Boolean superuser;
-	private String PWD = "numaPistacheCottapie";
 
 	/* Constructor */
-	public BookStore() throws ClassNotFoundException {
-		/*
-		 * Fazendo conexão com o banco de dados em SQLite3 a partir do conector
-		 * JDBC. Todo o banco de dados estará acessível via atributo privado
-		 * statement
+	public BookStoreold() throws ClassNotFoundException {
+		/* Fazendo conexão com o banco de dados em SQLite3 a partir do conector
+		 * JDBC.
+		 * Todo o banco de dados estará acessível via atributo privado statement
 		 */
-		this.superuser = false;
 		Class.forName("org.sqlite.JDBC");
 
 		Connection connection = null;
@@ -41,23 +37,32 @@ public class BookStore implements rmtBookStore {
 			// if the error message is "out of memory",
 			// it probably means no database file is found
 			System.err.println(e.getMessage());
-		}
+		} 
 	}
 
 	/* Methods */
 	/* Auxiliar Methods */
 	public ResultSet fetchData(String query) throws SQLException {
-		return (statement.executeQuery(query));
+
+			//ResultSet rs = statement.executeQuery("select * from livro");
+			return(statement.executeQuery("select * from livro"));
+		/*	ResultSet res = rs;
+			while (rs.next()) {
+				// read the result set
+				System.out.println("name = " + rs.getString("titulo"));
+				System.out.println("ano = " + rs.getInt("ano"));
+			}
+			return res;*/
+
 	}
 
-	/* Remote Methods */
 	@Override
 	public ArrayList<String> showStore() throws RemoteException {
 		ArrayList<String> store = new ArrayList<String>(); /* Return */
-		String aux; /* SQL */
+		String aux = "", query = "SELECT ISBN10, titulo FROM livro"; /* SQL */
 
 		try {
-			ResultSet res = fetchData("SELECT ISBN10, titulo FROM livro");
+			ResultSet res = fetchData(query);
 
 			/* Handling the Data */
 			while (res.next()) {
@@ -78,7 +83,7 @@ public class BookStore implements rmtBookStore {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
+		System.out.println("Enviando dados...");
 		/* Returning the Array List */
 		return store;
 	}
@@ -87,27 +92,27 @@ public class BookStore implements rmtBookStore {
 	public ArrayList<String> fetchDescription(String isbn)
 			throws RemoteException {
 		ArrayList<String> book = new ArrayList<String>();
-		/* SQL */
-		String aux = "SELECT titulo, descricao FROM livro WHERE ISBN10 = ";
+		String aux, query = "SELECT titulo, descricao FROM livro "
+				+ "WHERE ISBN10 = "; /* SQL */
 
-		aux += isbn;
+		query.concat(isbn);
 
 		/* DEBUG */
-		System.out.println(aux);
+		System.out.println(query);
 
 		/* Working on it */
 		try {
-			ResultSet res = fetchData(aux);
+			ResultSet res = fetchData(query);
 
 			while (res.next()) {
 				/* First Line is the ISBN string */
 				aux = "ISBN: ";
-				aux += isbn;
+				aux.concat(isbn);
 				book.add(aux);
 
 				/* Second Line is the Title String */
 				aux = "Titulo: ";
-				aux += res.getString("titulo");
+				aux.concat(res.getString("titulo"));
 				book.add(aux);
 
 				/* Third Line is the Description */
@@ -117,7 +122,7 @@ public class BookStore implements rmtBookStore {
 			/* Case Result Set was an empty set */
 			if (book.size() == 0)
 				book.add("Esse ISBN nao consta em nossos"
-						+ " estoques, desculpe!");
+						+ "estoques, desculpe!");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -130,7 +135,7 @@ public class BookStore implements rmtBookStore {
 		ArrayList<String> book = new ArrayList<String>();
 		String aux, query = "SELECT * FROM livro WHERE ISBN10 = "; /* SQL */
 
-		query += isbn;
+		query.concat(isbn);
 
 		/* DEBUG */
 		System.out.println(query);
@@ -141,27 +146,27 @@ public class BookStore implements rmtBookStore {
 			while (res.next()) {
 				/* First Line is the ISBN string */
 				aux = "ISBN: ";
-				aux += isbn;
+				aux.concat(isbn);
 				book.add(aux);
 
 				/* Second Line is the Title String */
 				aux = "Titulo: ";
-				aux += res.getString("titulo");
+				aux.concat(res.getString("titulo"));
 				book.add(aux);
 
 				/* Third Line is the Publishing House */
 				aux = "Editora: ";
-				aux += res.getString("editora");
+				aux.concat(res.getString("editora"));
 				book.add(aux);
 
 				/* Fourth Line is the year */
 				aux = "Ano: ";
-				aux += Integer.toString(res.getInt("ano"));
+				aux.concat(Integer.toString(res.getInt("ano")));
 				book.add(aux);
 
 				/* Fifth Line is the Number on Store */
 				aux = "Estoque: ";
-				aux += Integer.toString(res.getInt("estoque"));
+				aux.concat(Integer.toString(res.getInt("estoque")));
 				book.add(aux);
 
 				/* Descricao */
@@ -179,43 +184,17 @@ public class BookStore implements rmtBookStore {
 		return book;
 	}
 
-	public ArrayList<Book> fetchAll() throws RemoteException {
-		ArrayList<Book> store = new ArrayList<Book>();
-		String query = "SELECT * FROM livro"; /* SQL */
+	@Override
+	public ArrayList<String> fetchAll() throws RemoteException {
+		ArrayList<String> store = new ArrayList<String>();
+		String aux, query = "SELECT * FROM livro"; /* SQL */
 
 		try {
-			ResultSet res = fetchData(query), author;
-			Book bk = new Book();
-			ArrayList<String> tmp = new ArrayList<String>();
+			ResultSet res = fetchData(query);
 
+			/* Each book is separated by an '^D' */
 			while (res.next()) {
-				/* Creating the object Book */
-				bk.setIsbn(Integer.toString(res.getInt("ISBN10")));
-				bk.setDesc(res.getString("descricao"));
-				bk.setPubHouse(res.getString("editora"));
-				bk.setRelDate(res.getInt("ano"));
-				bk.setStore(res.getInt("estoque"));
-				bk.setTitle("titulo");
-
-				/* Getting author data */
-				query = "SELECT * FROM autor WHERE a_id = "
-						+ Integer.toString(res.getInt("autores"));
-
-				/* DEBUG */
-				System.out.println(query);
-
-				author = fetchData(query);
-
-				/* VERIFICAR */
-				author.next();
-				for (int i = 1; i < 5; i++) {
-					if (author.getString(i) != null)
-						tmp.add(author.getString(i));
-				}
-				bk.setAuthor(tmp);
-
-				/* Add to the store array */
-				store.add(bk);
+				//store.add(res.getString());
 			}
 
 		} catch (Exception e) {
@@ -224,59 +203,19 @@ public class BookStore implements rmtBookStore {
 		return store;
 	}
 
+	@Override
 	public int getNumber(String isbn) throws RemoteException {
-		String aux = "SELECT estoque FROM livro WHERE ISBN10 = "; /* SQL */
-
-		aux += isbn;
-
-		/* DEBUG */
-		System.out.println();
-
-		try {
-			ResultSet res = fetchData(aux);
-
-			while (res.next())
-				return res.getInt("estoque");
-
-			System.out.println("Esse ISBN nao consta em nossos "
-					+ "estoques, desculpe!");
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
-	public Boolean login(String pass) throws RemoteException {
-		if (pass.equals(PWD)) {
-			this.superuser = true;
-			return true;
-		}
-		this.superuser = false;
-		return false;
-	}
+	/* Remotes Methods */
 
-	@Override
-	public String setNumber(int num, String isbn) throws RemoteException,
-			SQLException {
-		// TODO Auto-generated method stub"update livro set estoque = "
-		if (this.superuser) {
-			String aux = "update livro set estoque = ";
-			aux += num + " where ISBN10 = " + isbn;
-			statement.executeUpdate(aux);
-			return "Estoque alterado com sucesso!";
-		}
-		return "Voce nao tem permissoes para mudar estoques...";
-	}
-	
 	public static void main(String args[]) {
 
 		try {
-			BookStore obj = new BookStore();
-			rmtBookStore stub = (rmtBookStore) UnicastRemoteObject
-					.exportObject(obj, 0);
+			BookStoreold obj = new BookStoreold();
+			rmtBookStore stub = (rmtBookStore) UnicastRemoteObject.exportObject(obj, 0);
 
 			// Bind the remote object's stub in the registry
 			Registry registry = LocateRegistry.getRegistry();

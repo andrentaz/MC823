@@ -13,13 +13,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import server.Book;
 
-public interface RmtBookStore extends Remote {
+public interface rmtBookStore extends Remote {
 	/* Shows the content of the Store */
 	public ArrayList<String> showStore() throws RemoteException;
 
 	/* Look for and show the description of a given ISBN */
-	public ArrayList<String> fetchDescription(String isbn)
-			throws RemoteException;
+	public ArrayList<String> fetchDescription(String isbn) throws RemoteException;
 
 	/* Search for info about an ISBN */
 	public ArrayList<String> fetchInfos(String isbn) throws RemoteException;
@@ -30,7 +29,9 @@ public interface RmtBookStore extends Remote {
 	/* Get the numbers of books on store */
 	public int getNumber(String isbn) throws RemoteException;
 	
-	/* Set the numbers of books on store */
-	public String setNumber(int num, String isbn, String pwd) throws RemoteException, SQLException;
+	/* Set the numbers of books on store -- only if you are the livraria client */
+	public String setNumber(int num, String isbn) throws RemoteException, SQLException;
 
+	/* Get access to livraria client */
+	public Boolean login(String pass) throws RemoteException;
 }
